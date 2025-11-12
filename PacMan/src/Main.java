@@ -1,5 +1,5 @@
+import java.awt.Color;
 import javax.swing.JLabel;
-import javax.swing.JFrame;
 
 public class Main {
     // crash tuts yt for guide only
@@ -7,10 +7,10 @@ public class Main {
     public static void main(String[] args) {
 
         myFrame frame1 = new myFrame();
+        PacMan pacmanGame = new PacMan();
 
-        JLabel label = new JLabel();
-        label.setText("Bruh");
-        frame1.add(label);
+        frame1.add(pacmanGame);
+        frame1.setVisible(true);
 
     }
 }
