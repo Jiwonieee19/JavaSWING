@@ -1,4 +1,3 @@
-import javax.swing.JLabel;
 
 public class Main {
     // crash tuts yt for guide only
