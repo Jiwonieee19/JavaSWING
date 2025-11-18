@@ -25,4 +25,4 @@ public class PacMan extends JPanel {
         redGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
     }
 }
-// cc ky magkuha kog sp toms
+// cc ky magkuha kog sp toms jusko cc
