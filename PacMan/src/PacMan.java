@@ -9,6 +9,7 @@ public class PacMan extends JPanel {
     private int columnSize = tileSize * column;
 
     // public ImageIcon redg = new ImageIcon("resources/pinkGhost.png");
+    // tryy imageicon
     private Image redGhost;
     private Image blueGhost;
     private Image pinkGhost;
@@ -17,12 +18,22 @@ public class PacMan extends JPanel {
     private Image pacmanDown;
     private Image pacmanLeft;
     private Image pacmanRight;
+    private Image wall;
 
     PacMan() {
         setPreferredSize(new Dimension(rowSize, columnSize));
         setBackground(Color.CYAN);
 
         redGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        blueGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        pinkGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        orangeGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        wall = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+
+        pacmanUp = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        pacmanDown = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        pacmanLeft = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+        pacmanRight = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
+
     }
 }
-// cc ky magkuha kog sp toms jusko cc
