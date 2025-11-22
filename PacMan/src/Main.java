@@ -18,6 +18,7 @@ public class Main {
         pacmanGame.add(l1);
         frame1.add(pacmanGame);
         frame1.setVisible(true);
+        //cc
 
     }
 }
