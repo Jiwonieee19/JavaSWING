@@ -10,7 +10,8 @@ public class PacMan extends JPanel {
 
     // public ImageIcon redg = new ImageIcon("resources/pinkGhost.png");
     // tryy imageicon
-    private ImageIcon redGhost;
+    // private ImageIcon redGhost;
+    private Image redGhost;
     private Image blueGhost;
     private Image pinkGhost;
     private Image orangeGhost;
@@ -24,9 +25,8 @@ public class PacMan extends JPanel {
         setPreferredSize(new Dimension(rowSize, columnSize));
         setBackground(Color.CYAN);
 
-        // redGhost = new
-        // ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
-        redGhost = new ImageIcon("resources/redGhost.png");
+        // redGhost = new ImageIcon("resources/redGhost.png");
+        redGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
         blueGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
         pinkGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
         orangeGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
