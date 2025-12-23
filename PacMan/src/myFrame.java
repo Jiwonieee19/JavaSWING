@@ -17,5 +17,6 @@ public class myFrame extends JFrame {
 
         PacMan pacmanGame = new PacMan();
         this.add(pacmanGame);
+        pacmanGame.requestFocus();
     }
 }

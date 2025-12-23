@@ -1,9 +1,10 @@
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashSet;
 
 import javax.swing.*;
 
-public class PacMan extends JPanel {
+public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     class Block {
         int x;
@@ -15,6 +16,10 @@ public class PacMan extends JPanel {
         int Startx;
         int Starty;
 
+        char direction = 'U';
+        int velocityX = 0;
+        int velocityY = 0;
+
         Block(Image image, int x, int y, int width, int height) {
             this.image = image;
             this.x = x;
@@ -24,6 +29,27 @@ public class PacMan extends JPanel {
             this.Startx = x;
             this.Starty = y;
 
+        }
+
+        void updateDirection(char direction) {
+            this.direction = direction;
+            updateVelocity();
+        }
+
+        void updateVelocity() {
+            if (this.direction == 'U') {
+                this.velocityX = 0;
+                this.velocityY = -tileSize / 4;
+            } else if (this.direction == 'D') {
+                this.velocityX = 0;
+                this.velocityY = tileSize / 4;
+            } else if (this.direction == 'L') {
+                this.velocityX = -tileSize / 4;
+                this.velocityY = 0;
+            } else if (this.direction == 'R') {
+                this.velocityX = tileSize / 4;
+                this.velocityY = 0;
+            }
         }
     }
 
@@ -51,10 +77,10 @@ public class PacMan extends JPanel {
             "X XX X XXX X XX X",
             "X    X     X    X",
             "XXXX XXX XXX XXXX",
-            "OOOX X     X XOOO",
-            "XXX X XXrXX X XXX",
+            "OOOX         XOOO",
+            "XXXX  XXrXX  XXXX",
             "O      bpo      O",
-            "XXX X XXXXX X XXX",
+            "XXXX  XXXXXX  XXX",
             "OOOX X     X XOOO",
             "XXXX X XXX X XXXX",
             "X       X       X",
@@ -73,10 +99,14 @@ public class PacMan extends JPanel {
     HashSet<Block> foods;
     Block pacman;
 
+    Timer gameLoop;
+
     PacMan() {
         setPreferredSize(new Dimension(columnSize, rowSize));
         setBackground(Color.BLACK);
         setLayout(null);
+        addKeyListener(this);
+        setFocusable(true);
 
         redGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
         blueGhost = new ImageIcon(getClass().getResource("./resources./blueGhost.png")).getImage();
@@ -92,6 +122,8 @@ public class PacMan extends JPanel {
 
         loadMap();
         System.out.println("" + foods.size() + '\n' + ghosts.size() + '\n' + walls.size());
+        gameLoop = new Timer(50, this); // 20fps (1000ml = 1sec / 50mlss)
+        gameLoop.start();
     }
 
     public void loadMap() {
@@ -138,6 +170,7 @@ public class PacMan extends JPanel {
     }
 
     public void draw(Graphics g) {
+
         g.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height, null);
 
         // gi sulod sa hashset tapos isa2hon ug pa gawas dris paint kuyawa
@@ -145,12 +178,61 @@ public class PacMan extends JPanel {
             g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
         }
 
-        for (Block food : foods) {
-            g.drawImage(food.image, food.x, food.y, food.width, food.height, null);
-        }
-
         for (Block wall : walls) {
             g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
         }
+
+        g.setColor(Color.WHITE);
+        for (Block food : foods) {
+            g.fillRect(food.x, food.y, food.width, food.height);
+        }
     }
+
+    public void move() {
+        pacman.x += pacman.velocityX;
+        pacman.y += pacman.velocityY;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // char direction = 'O';
+        // if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        // direction = 'L';
+        // } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        // direction = 'R';
+        // } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+        // direction = 'U';
+        // } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+        // direction = 'D';
+        // }
+        // pacman.updateDirection(direction);
+        // move();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println("keyEcent: " + e.getKeyCode());
+        char direction = 'O';
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            direction = 'L';
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            direction = 'R';
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            direction = 'U';
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            direction = 'D';
+        }
+        pacman.updateDirection(direction);
+        move();
+    }
+
 }
