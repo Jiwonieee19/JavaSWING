@@ -16,6 +16,7 @@ public class PacMan extends JPanel {
         int Starty;
 
         Block(Image image, int x, int y, int width, int height) {
+            this.image = image;
             this.x = x;
             this.y = y;
             this.width = width;
@@ -29,7 +30,7 @@ public class PacMan extends JPanel {
     private int row = 22;
     private int column = 17;
     private int tileSize = 32;
-    private int rowSize = tileSize * 23;
+    private int rowSize = tileSize;
     private int columnSize = tileSize * column;
 
     private Image redGhost;
@@ -74,7 +75,7 @@ public class PacMan extends JPanel {
 
     PacMan() {
         setPreferredSize(new Dimension(columnSize, rowSize));
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
         setLayout(null);
 
         redGhost = new ImageIcon(getClass().getResource("./resources./redGhost.png")).getImage();
@@ -89,11 +90,8 @@ public class PacMan extends JPanel {
         pacmanLeft = new ImageIcon(getClass().getResource("./resources./pacmanLeft.png")).getImage();
         pacmanRight = new ImageIcon(getClass().getResource("./resources./pacmanRight.png")).getImage();
 
-        // JLabel tryy = new JLabel();
-        // ImageIcon tryIcon = new ImageIcon("wall.png");
-        // tryy.setIcon(tryIcon);
-        // this.add(tryy);
         loadMap();
+        System.out.println("" + foods.size() + '\n' + ghosts.size() + '\n' + walls.size());
     }
 
     public void loadMap() {
@@ -106,15 +104,53 @@ public class PacMan extends JPanel {
                 String mapRow = tileMap[r];
                 char mapColumn = mapRow.charAt(c);
 
-                if (mapColumn == 'X') {
-                    JLabel l1 = new JLabel();
-                    l1.setIcon(new ImageIcon("wall.png"));
-                    int posX = c * tileSize;
-                    int posY = r * tileSize;
-                    l1.setBounds(posX, posY, tileSize, tileSize);
-                    this.add(l1);
+                int posX = c * tileSize;
+                int posY = r * tileSize;
+
+                if (mapColumn == 'X') { // wall
+                    Block wallBlock = new Block(wall, posX, posY, tileSize, tileSize);
+                    walls.add(wallBlock);
+                } else if (mapColumn == ' ') { // food
+                    Block foodBlock = new Block(null, posX + 14, posY + 14, 4, 4);
+                    foods.add(foodBlock);
+                } else if (mapColumn == 'b') { // blue G
+                    Block ghostBlock = new Block(blueGhost, posX, posY, tileSize, tileSize);
+                    ghosts.add(ghostBlock);
+                } else if (mapColumn == 'r') { // red G
+                    Block ghostBlock = new Block(redGhost, posX, posY, tileSize, tileSize);
+                    ghosts.add(ghostBlock);
+                } else if (mapColumn == 'p') { // pink G
+                    Block ghostBlock = new Block(pinkGhost, posX, posY, tileSize, tileSize);
+                    ghosts.add(ghostBlock);
+                } else if (mapColumn == 'o') { // orange G
+                    Block ghostBlock = new Block(orangeGhost, posX, posY, tileSize, tileSize);
+                    ghosts.add(ghostBlock);
+                } else if (mapColumn == 'P') { // Pacman
+                    pacman = new Block(pacmanLeft, posX, posY, tileSize, tileSize);
                 }
             }
+        }
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
+    }
+
+    public void draw(Graphics g) {
+        g.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height, null);
+
+        // gi sulod sa hashset tapos isa2hon ug pa gawas dris paint kuyawa
+        for (Block ghost : ghosts) {
+            g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
+        }
+
+        for (Block food : foods) {
+            g.drawImage(food.image, food.x, food.y, food.width, food.height, null);
+        }
+
+        for (Block wall : walls) {
+            g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
         }
     }
 }
