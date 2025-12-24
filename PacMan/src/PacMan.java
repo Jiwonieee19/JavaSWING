@@ -6,6 +6,7 @@ import javax.swing.*;
 
 public class PacMan extends JPanel implements ActionListener, KeyListener {
 
+    // TEMPLATE SIYA SA TANAN SPRITES
     class Block {
         int x;
         int y;
@@ -16,7 +17,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         int Startx;
         int Starty;
 
-        char direction = 'U';
+        char direction = ' ';
         int velocityX = 0;
         int velocityY = 0;
 
@@ -122,6 +123,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
         loadMap();
         System.out.println("" + foods.size() + '\n' + ghosts.size() + '\n' + walls.size());
+        // GA PA TRIGGER SA ACTIONLISTENER
         gameLoop = new Timer(50, this); // 20fps (1000ml = 1sec / 50mlss)
         gameLoop.start();
     }
@@ -139,6 +141,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 int posX = c * tileSize;
                 int posY = r * tileSize;
 
+                // GI STORE EACH CATEGORY SA HASHSET, THEN FOR EACH LOOP LATUR PAG DISPLAY
                 if (mapColumn == 'X') { // wall
                     Block wallBlock = new Block(wall, posX, posY, tileSize, tileSize);
                     walls.add(wallBlock);
@@ -164,16 +167,19 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    // MAO NI E REPAINT KADA TRIGGER SA ACTIONLISTENER
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
     }
 
+    // CREATING THE GAME ITSELF, BUT GINA PAINT NIYA TANAN EVERY 50MLS
     public void draw(Graphics g) {
 
         g.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height, null);
 
-        // gi sulod sa hashset tapos isa2hon ug pa gawas dris paint kuyawa
+        // gi sulod sa hashset tapos isa2hon ug pa gawas dris paint kuyawa, DIRIA GI
+        // DISPLAY USING GRAPHICS
         for (Block ghost : ghosts) {
             g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
         }
@@ -191,10 +197,29 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     public void move() {
         pacman.x += pacman.velocityX;
         pacman.y += pacman.velocityY;
+
+        // if true si collision method, dli mo move si pacman
+        for (Block wall : walls) {
+            if (collision(pacman, wall)) {
+                pacman.x -= pacman.velocityX;
+                pacman.y -= pacman.velocityY;
+                break;
+            }
+        }
+    }
+
+    // this damn formula needs to be studied
+    public boolean collision(Block a, Block b) {
+        return a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        move(); // if naa dri, ang keys kay murag naka hold, same as pacman game talaga, since
+                // the this.direction now contains the last key nga gi pressed
         repaint();
     }
 
@@ -204,24 +229,12 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // char direction = 'O';
-        // if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-        // direction = 'L';
-        // } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-        // direction = 'R';
-        // } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-        // direction = 'U';
-        // } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-        // direction = 'D';
-        // }
-        // pacman.updateDirection(direction);
-        // move();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         System.out.println("keyEcent: " + e.getKeyCode());
-        char direction = 'O';
+        char direction = ' ';
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             direction = 'L';
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -230,9 +243,13 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             direction = 'U';
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             direction = 'D';
+            // pacman.updateDirection('D'); // in ani nga approach ang sa yt
         }
+        // SEND UG PARAMETER TO COMPARE SA DIRECTION INSIDE CLASS BLOCK, PARA MA
+        // DETERMINE KNSA NGA BLOCK MO MOVE
         pacman.updateDirection(direction);
-        move();
+        // move(); //if naa dri, kada click pa siya mo move, since mag restart to ' '
+        // ang char direction if dria
     }
 
 }
