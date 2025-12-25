@@ -209,11 +209,22 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     }
 
     // this damn formula needs to be studied
-    public boolean collision(Block a, Block b) {
-        return a.x < b.x + b.width &&
-                a.x + a.width > b.x &&
-                a.y < b.y + b.height &&
-                a.y + a.height > b.y;
+    // public boolean collision(Block a, Block b) { //this is a work of sorcery!
+    // return a.x < b.x + b.width &&
+    // a.x + a.width > b.x &&
+    // a.y < b.y + b.height &&
+    // a.y + a.height > b.y;
+    // }
+
+    public boolean collision(Block a, Block b) { // work but a lot to fix, its mine btw
+        boolean res = false;
+        if ((a.x < b.x && a.width + a.x > b.x) &&
+                (b.y < a.y && b.height + b.y > a.y) ||
+                (a.y < b.y && a.height + a.y > b.y) &&
+                        (b.x < a.x && b.width + b.x > a.x)) {
+            res = true;
+        }
+        return res;
     }
 
     @Override
