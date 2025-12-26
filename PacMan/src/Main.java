@@ -1,4 +1,3 @@
-import javax.swing.*;
 
 public class Main {
     // crash tuts yt for guide only

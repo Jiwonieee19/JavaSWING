@@ -64,6 +64,11 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 this.velocityY = 0;
             }
         }
+
+        void reset() {
+            this.x = this.Startx;
+            this.y = this.Starty;
+        }
     }
 
     private int row = 22;
@@ -93,7 +98,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             "OOOX         XOOO",
             "XXXX XXXrXXX XXXX",
             "O      bpo      O",
-            "XXXX XXXXXXX XXXX",
+            "XXXX XXX XXX XXXX",
             "OOOX X     X XOOO",
             "XXXX X XXX X XXXX",
             "X       X       X",
@@ -115,6 +120,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     Timer gameLoop;
     char[] directions = { 'U', 'D', 'L', 'R' };
     Random random = new Random();
+    int score = 0;
+    int lives = 3;
+    boolean gameOver = false;
 
     PacMan() {
         setPreferredSize(new Dimension(columnSize, rowSize));
@@ -210,6 +218,14 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         for (Block food : foods) {
             g.fillRect(food.x, food.y, food.width, food.height);
         }
+
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        if (gameOver) {
+            g.drawString("GAME OVER, HIGHEST SCORE: " + score, tileSize, 20);
+        } else {
+            g.drawString("Score: " + score, tileSize, 20);
+            g.drawString("Lives: " + lives, columnSize - (tileSize * 3), 20);
+        }
     }
 
     public void move() {
@@ -224,6 +240,32 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 break;
             }
         }
+
+        if (foods.isEmpty()) {
+            loadMap();
+            resetRound();
+        }
+
+        for (Block food : foods) {
+            if (collision(pacman, food)) {
+                foods.remove(food);
+                score += 10;
+                break;
+            }
+        }
+
+        for (Block ghost : ghosts) {
+            if (collision(pacman, ghost)) {
+                lives -= 1;
+                if (lives == 0) {
+                    gameOver = true;
+                    return;
+                }
+                resetRound();
+                break;
+            }
+        }
+
         if (pacman.x <= 0) {
             pacman.x = columnSize - tileSize;
             pacman.y = 9 * tileSize;
@@ -235,7 +277,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         // ghost movements
         for (Block ghost : ghosts) {
             if (ghost.y == tileSize * 9 && ghost.x == tileSize * 8) {
-                ghost.updateDirection('U');
+                ghost.updateDirection(directions[random.nextInt(2)]);
             }
             if (ghost.y == tileSize * 9 && (ghost.x == tileSize * 4 || ghost.x == tileSize * 12)
                     && (ghost.direction != 'R' || ghost.direction != 'L')) {
@@ -283,11 +325,24 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         return res;
     }
 
+    public void resetRound() {
+        pacman.reset();
+        pacman.velocityX = 0;
+        pacman.velocityY = 0;
+        for (Block ghost : ghosts) {
+            ghost.reset();
+            ghost.updateDirection(directions[random.nextInt(4)]);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         move(); // if naa dri, ang keys kay murag naka hold, same as pacman game talaga, since
                 // the this.direction now contains the last key nga gi pressed
         repaint();
+        if (gameOver) {
+            gameLoop.stop();
+        }
     }
 
     @Override
@@ -300,6 +355,16 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        // after gameover ma pause, then trigger si key release, rekta sa if statement,
+        // then matic restart
+        if (gameOver) {
+            loadMap();
+            lives = 3;
+            score = 0;
+            gameOver = false;
+            resetRound();
+            gameLoop.start();
+        }
         System.out.println("keyEcent: " + e.getKeyCode());
         char direction = ' ';
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -334,3 +399,15 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     }
 
 }
+
+// TAKE AWAYS
+// maot or not accurate lang iyang solution sa portal line if ma stuck thats why
+// i created my own,
+// and sa teleport which is a challenge nya and i did it,
+// then ofc sa solution for collision then i did my reserts why that's that,
+// and maglisod ug suong2 ang characters since need ug timing, siguro ill put if
+// collision then and next direction is and pending direction nga nag cause ug
+// collison,
+// just like how the actual pacman play,
+// tas mo pause after minus live ka pacman, pause sa ang ghost then lihok after
+// pacman lihok
