@@ -224,11 +224,22 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 break;
             }
         }
+        if (pacman.x <= 0) {
+            pacman.x = columnSize - tileSize;
+            pacman.y = 9 * tileSize;
+        } else if (pacman.x + pacman.width >= columnSize) {
+            pacman.x = 0 + tileSize;
+            pacman.y = 9 * tileSize;
+        }
 
         // ghost movements
         for (Block ghost : ghosts) {
-            if (ghost.y == tileSize * 9) {
+            if (ghost.y == tileSize * 9 && ghost.x == tileSize * 8) {
                 ghost.updateDirection('U');
+            }
+            if (ghost.y == tileSize * 9 && (ghost.x == tileSize * 4 || ghost.x == tileSize * 12)
+                    && (ghost.direction != 'R' || ghost.direction != 'L')) {
+                ghost.updateDirection(directions[random.nextInt(2) + 2]);
             }
             ghost.x += ghost.velocityX;
             ghost.y += ghost.velocityY;
