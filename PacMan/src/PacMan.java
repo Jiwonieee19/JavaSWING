@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashSet;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -33,8 +34,19 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
 
         void updateDirection(char direction) {
+            char prevDirection = this.direction;
             this.direction = direction;
             updateVelocity();
+            this.x += this.velocityX;
+            this.y += this.velocityY;
+            for (Block wall : walls) {
+                if (collision(this, wall)) {
+                    this.x -= this.velocityX;
+                    this.y -= this.velocityY;
+                    this.direction = prevDirection;
+                    updateVelocity();
+                }
+            }
         }
 
         void updateVelocity() {
@@ -79,9 +91,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             "X    X     X    X",
             "XXXX XXX XXX XXXX",
             "OOOX         XOOO",
-            "XXXX  XXrXX  XXXX",
+            "XXXX XXXrXXX XXXX",
             "O      bpo      O",
-            "XXXX  XXXXXX  XXX",
+            "XXXX XXXXXXX XXXX",
             "OOOX X     X XOOO",
             "XXXX X XXX X XXXX",
             "X       X       X",
@@ -101,6 +113,8 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     Block pacman;
 
     Timer gameLoop;
+    char[] directions = { 'U', 'D', 'L', 'R' };
+    Random random = new Random();
 
     PacMan() {
         setPreferredSize(new Dimension(columnSize, rowSize));
@@ -122,6 +136,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         pacmanRight = new ImageIcon(getClass().getResource("./resources./pacmanRight.png")).getImage();
 
         loadMap();
+        for (Block ghost : ghosts) {
+            char newDirection = directions[random.nextInt(4)];
+            ghost.updateDirection(newDirection);
+        }
         System.out.println("" + foods.size() + '\n' + ghosts.size() + '\n' + walls.size());
         // GA PA TRIGGER SA ACTIONLISTENER
         gameLoop = new Timer(50, this); // 20fps (1000ml = 1sec / 50mlss)
@@ -206,6 +224,32 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 break;
             }
         }
+
+        // ghost movements
+        for (Block ghost : ghosts) {
+            if (ghost.y == tileSize * 9) {
+                ghost.updateDirection('U');
+            }
+            ghost.x += ghost.velocityX;
+            ghost.y += ghost.velocityY;
+
+            for (Block wall : walls) {
+                if (collision(wall, ghost)) {
+                    ghost.x -= ghost.velocityX;
+                    ghost.y -= ghost.velocityY;
+                    char newDirections = directions[random.nextInt(4)];
+                    ghost.updateDirection(newDirections);
+                }
+            }
+
+            if (ghost.x <= 0) {
+                ghost.x = columnSize - tileSize;
+                ghost.y = 9 * tileSize;
+            } else if (ghost.x + ghost.width >= columnSize) {
+                ghost.x = 0 + tileSize;
+                ghost.y = 9 * tileSize;
+            }
+        }
     }
 
     // this damn formula needs to be studied
@@ -216,12 +260,13 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     // a.y + a.height > b.y;
     // }
 
-    public boolean collision(Block a, Block b) { // work but a lot to fix, its mine btw
+    public boolean collision(Block a, Block b) { // gisabot ra nko and now gets na why this simple formula works well
+                                                 // than others na naa sko utok
         boolean res = false;
-        if ((a.x < b.x && a.width + a.x > b.x) &&
-                (b.y < a.y && b.height + b.y > a.y) ||
-                (a.y < b.y && a.height + a.y > b.y) &&
-                        (b.x < a.x && b.width + b.x > a.x)) {
+        if (a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y) {
             res = true;
         }
         return res;
@@ -248,19 +293,33 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         char direction = ' ';
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             direction = 'L';
+            pacman.image = pacmanLeft;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             direction = 'R';
+            pacman.image = pacmanRight;
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             direction = 'U';
+            pacman.image = pacmanUp;
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             direction = 'D';
+            pacman.image = pacmanDown;
             // pacman.updateDirection('D'); // in ani nga approach ang sa yt
         }
         // SEND UG PARAMETER TO COMPARE SA DIRECTION INSIDE CLASS BLOCK, PARA MA
         // DETERMINE KNSA NGA BLOCK MO MOVE
         pacman.updateDirection(direction);
-        // move(); //if naa dri, kada click pa siya mo move, since mag restart to ' '
-        // ang char direction if dria
+        // move(); //if naa dri, kada click pa siya mo move, since mag restart to ' ',
+        // ayy same thing ra siya actually, bantug lang dria ra mo move ky if sa
+        // repaint, gina paint na niya tong bag.ong direction
+
+        if (pacman.direction == 'U')
+            pacman.image = pacmanUp;
+        if (pacman.direction == 'D')
+            pacman.image = pacmanDown;
+        if (pacman.direction == 'L')
+            pacman.image = pacmanLeft;
+        if (pacman.direction == 'R')
+            pacman.image = pacmanRight;
     }
 
 }
