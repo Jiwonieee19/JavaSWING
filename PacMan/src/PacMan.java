@@ -290,6 +290,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             ghost.x += ghost.velocityX;
             ghost.y += ghost.velocityY;
 
+            // if ghost collided to walls
             for (Block wall : walls) {
                 if (collision(wall, ghost)) {
                     ghost.x -= ghost.velocityX;
@@ -299,6 +300,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 }
             }
 
+            // ghosts teleport
             if (ghost.x <= 0) {
                 ghost.x = columnSize - tileSize;
                 ghost.y = 9 * tileSize;
