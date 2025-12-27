@@ -241,11 +241,13 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             }
         }
 
+        // next round after cleared
         if (foods.isEmpty()) {
             loadMap();
             resetRound();
         }
 
+        // eating food
         for (Block food : foods) {
             if (collision(pacman, food)) {
                 foods.remove(food);
@@ -254,6 +256,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             }
         }
 
+        // touches ghost
         for (Block ghost : ghosts) {
             if (collision(pacman, ghost)) {
                 lives -= 1;
@@ -266,6 +269,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             }
         }
 
+        // teleport ni pacman
         if (pacman.x <= 0) {
             pacman.x = columnSize - tileSize;
             pacman.y = 9 * tileSize;

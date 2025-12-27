@@ -5,7 +5,7 @@ public class myFrame extends JFrame {
     private int row = 22;
     private int column = 17;
     private int tileSize = 32;
-    private int rowSize = tileSize * row + 6;
+    private int rowSize = tileSize * (row + 1) + 5;
     private int columnSize = tileSize * column + 14;
 
     myFrame() {
