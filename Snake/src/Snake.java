@@ -78,7 +78,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         addKeyListener(this);
 
         loadBody();
-        gameLoop = new Timer(50, this);
+        gameLoop = new Timer(200, this);
         gameLoop.start();
     }
 
@@ -86,10 +86,12 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // not)
     public void loadBody() {
         bodies = new HashSet<Components>();
-        head = new Components(30, 10, bodyWidthHeight, bodyWidthHeight);
+        head = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
 
-        Components firstBody = new Components(10, 10, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
+        Components secondBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
+        bodies.add(secondBody);
     }
 
     // e call sa actionlistener pra ma update ang head, but need pa e update ang
