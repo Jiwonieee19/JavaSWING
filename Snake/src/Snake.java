@@ -40,20 +40,20 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // makes the movement by manipulating velocity value
         void updateMovement() {
             if (this.direction == 'R') {
-                this.velocityX = 6;
+                this.velocityX = 20;
                 this.velocityY = 0; // if wla ni, mag dagan 2 ways ang head, since ma store ang prev velocityY if
                                     // dli na 0
             }
             if (this.direction == 'L') {
-                this.velocityX = -6;
+                this.velocityX = -20;
                 this.velocityY = 0;
             }
             if (this.direction == 'U') {
-                this.velocityY = -6;
+                this.velocityY = -20;
                 this.velocityX = 0;
             }
             if (this.direction == 'D') {
-                this.velocityY = 6;
+                this.velocityY = 20;
                 this.velocityX = 0;
             }
         }
@@ -99,10 +99,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         head.y += head.velocityY;
 
         // body
-        for (Components body : bodies) {
-            body.bodyDirection(body.prevDirection, head.direction);
-            body.x += body.velocityX;
-            body.y += body.velocityY;
+        if (head.velocityX == 0 && head.velocityY == 0) {
+        } else {
+            for (Components body : bodies) {
+                body.bodyDirection(body.prevDirection, head.direction);
+                body.x += body.velocityX;
+                body.y += body.velocityY;
+            }
         }
     }
 
