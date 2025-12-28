@@ -11,7 +11,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     class Components {
         // declaration
         int x, y, velocityX, velocityY, startX, startY, width, height;
-        char direction, prevDirection;
+        char direction, prevDirection = 'R';
 
         // initialization, pede rani e separate ug class
         Components(int x, int y, int width, int height) {
@@ -27,6 +27,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         void updateDirection(char direction) {
             this.direction = direction;
             updateMovement();
+        }
+
+        // malalaang function pra sa body hooooo
+        void bodyDirection(char prevDirection, char ogDirection) {
+            this.direction = prevDirection;
+            updateMovement();
+            this.direction = ogDirection;
+            this.prevDirection = ogDirection;
         }
 
         // makes the movement by manipulating velocity value
@@ -89,6 +97,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void move() {
         head.x += head.velocityX;
         head.y += head.velocityY;
+
+        // body
+        for (Components body : bodies) {
+            body.bodyDirection(body.prevDirection, head.direction);
+            body.x += body.velocityX;
+            body.y += body.velocityY;
+        }
     }
 
     // needed mani, especially ang super.paint
