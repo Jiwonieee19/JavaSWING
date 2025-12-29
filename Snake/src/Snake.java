@@ -23,8 +23,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             this.startY = y;
             this.width = width;
             this.height = height;
-            // this.prevX = x;
-            // this.prevY = y;
         }
 
         // store direction then call updatemovement function
@@ -34,8 +32,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         }
 
         void bodyDirection(int prevX, int prevY) {
-            // this.prevX = this.x;
-            // this.prevY = this.y;
             this.x = prevX;
             this.y = prevY;
         }
@@ -61,9 +57,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             }
         }
 
-        // body movement
-        void positionTracker() {
-        }
     }
 
     // declaration
@@ -95,14 +88,17 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         bodies = new LinkedList<Components>();
         head = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
 
-        Components firstBody = new Components(60, 10, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
-        Components secondBody = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
+        Components secondBody = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(secondBody);
-        Components thirdBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
-        bodies.add(thirdBody);
-        Components foBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
-        bodies.add(foBody);
+        // Components thirdBody = new Components(80, 10, bodyWidthHeight,
+        // bodyWidthHeight);
+        // bodies.add(thirdBody);
+        // Components foBody = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
+        // bodies.add(foBody);
+        // THANKS TEST BODY'S AHAHAHAHA anyways dria na mo pop up ang nakaon na foods
+        // after makalihok sa existing bodies base skong pag sabot skong function
     }
 
     // e call sa actionlistener pra ma update ang head, but need pa e update ang
@@ -118,7 +114,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 bodies.get(i).bodyDirection(head.prevX, head.prevY);
                 head.prevX = head.x;
                 head.prevY = head.y;
-                if (i > 0) {
+                if (i == 1) {
                     for (int j = 1; j < bodies.size(); j++) {
                         bodies.get(j).bodyDirection(bodies.get(j - 1).prevX, bodies.get(j - 1).prevY);
                         bodies.get(j - 1).prevX = bodies.get(j - 1).x;
@@ -139,12 +135,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     // painting the shi
     public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect(head.x, head.y, head.width, head.height);
+
         for (Components body : bodies) {
             g.setColor(Color.WHITE);
             g.fillRect(body.x, body.y, body.width, body.height);
         }
+
+        g.setColor(Color.RED);
+        g.fillRect(head.x, head.y, head.width, head.height);
     }
 
     // action listener na ma pop ni timer
