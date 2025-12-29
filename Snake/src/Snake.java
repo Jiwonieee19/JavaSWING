@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.*;
@@ -11,7 +11,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     class Components {
         // declaration
         int x, y, velocityX, velocityY, startX, startY, width, height;
-        char direction, prevDirection = 'R';
+        char direction, ogDirection = ' ';
+        int prevX, prevY;
+        static int[] snakePosition = new int[4];
 
         // initialization, pede rani e separate ug class
         Components(int x, int y, int width, int height) {
@@ -21,6 +23,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             this.startY = y;
             this.width = width;
             this.height = height;
+            // this.prevX = x;
+            // this.prevY = y;
         }
 
         // store direction then call updatemovement function
@@ -29,12 +33,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             updateMovement();
         }
 
-        // malalaang function pra sa body hooooo
-        void bodyDirection(char prevDirection, char ogDirection) {
-            this.direction = prevDirection;
-            updateMovement();
-            this.direction = ogDirection;
-            this.prevDirection = ogDirection;
+        void bodyDirection(int prevX, int prevY) {
+            // this.prevX = this.x;
+            // this.prevY = this.y;
+            this.x = prevX;
+            this.y = prevY;
         }
 
         // makes the movement by manipulating velocity value
@@ -57,10 +60,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 this.velocityX = 0;
             }
         }
+
+        // body movement
+        void positionTracker() {
+        }
     }
 
     // declaration
-    HashSet<Components> bodies;
+    LinkedList<Components> bodies;
     Components head;
     int foodWidthHeight = 10;
     int bodyWidthHeight = 20;
@@ -85,13 +92,15 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // store the firstbody and head (duha2 pako if dria ba motubo iyang lawas or
     // not)
     public void loadBody() {
-        bodies = new HashSet<Components>();
-        head = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
+        bodies = new LinkedList<Components>();
+        head = new Components(60, 10, bodyWidthHeight, bodyWidthHeight);
 
-        Components firstBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
-        Components secondBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
+        Components secondBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(secondBody);
+        Components thirdBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
+        bodies.add(thirdBody);
     }
 
     // e call sa actionlistener pra ma update ang head, but need pa e update ang
@@ -103,10 +112,18 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // body
         if (head.velocityX == 0 && head.velocityY == 0) {
         } else {
-            for (Components body : bodies) {
-                body.bodyDirection(body.prevDirection, head.direction);
-                body.x += body.velocityX;
-                body.y += body.velocityY;
+            for (int i = 0; i < bodies.size(); i++) {
+                bodies.get(i).bodyDirection(head.prevX, head.prevY);
+                head.prevX = head.x;
+                head.prevY = head.y;
+                if (i > 0) {
+                    for (int j = 1; j < bodies.size(); j++) {
+                        bodies.get(j).bodyDirection(bodies.get(j - 1).prevX, bodies.get(j - 1).prevY);
+                        bodies.get(j - 1).prevX = bodies.get(j - 1).x;
+                        bodies.get(j - 1).prevY = bodies.get(j - 1).y;
+
+                    }
+                }
             }
         }
     }
