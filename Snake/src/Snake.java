@@ -93,14 +93,16 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // not)
     public void loadBody() {
         bodies = new LinkedList<Components>();
-        head = new Components(60, 10, bodyWidthHeight, bodyWidthHeight);
+        head = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
 
-        Components firstBody = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(60, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
-        Components secondBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
+        Components secondBody = new Components(40, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(secondBody);
-        Components thirdBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
+        Components thirdBody = new Components(20, 10, bodyWidthHeight, bodyWidthHeight);
         bodies.add(thirdBody);
+        Components foBody = new Components(0, 10, bodyWidthHeight, bodyWidthHeight);
+        bodies.add(foBody);
     }
 
     // e call sa actionlistener pra ma update ang head, but need pa e update ang
@@ -112,7 +114,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // body
         if (head.velocityX == 0 && head.velocityY == 0) {
         } else {
-            for (int i = 0; i < bodies.size(); i++) {
+            for (int i = 0; i < 2; i++) {
                 bodies.get(i).bodyDirection(head.prevX, head.prevY);
                 head.prevX = head.x;
                 head.prevY = head.y;
@@ -126,6 +128,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 }
             }
         }
+        // TANGINA NA SOLVE NKO NGA WALAY AI
     }
 
     // needed mani, especially ang super.paint
