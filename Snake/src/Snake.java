@@ -30,6 +30,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             updateMovement();
         }
 
+        // store each prev position from head to last body, by iterating it later
         void bodyDirection(int prevX, int prevY) {
             this.x = prevX;
             this.y = prevY;
@@ -127,14 +128,18 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             gameLoop.stop();
         }
 
-        // body
-        if (head.velocityX == 0 && head.velocityY == 0) {
+        // body, works like magic HAHAHA i wrote it bro
+        if (head.velocityX == 0 && head.velocityY == 0) { // this if keeps the body at stop motion if the head isnt
+                                                          // moving yet
         } else {
             for (int i = 0; i < 2; i++) {
+                // this is only for the firstbody after the head, it will be the only one that
+                // will get the head as its prev position
                 bodies.get(i).bodyDirection(head.prevX, head.prevY);
                 head.prevX = head.x;
                 head.prevY = head.y;
                 if (i == 1) {
+                    // everyone will take their prev position to body ahead them (j - 1)
                     for (int j = 1; j < bodies.size(); j++) {
                         if (collision(head, bodies.get(j)) && j > 1) {
                             gameLoop.stop();
@@ -150,6 +155,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // TANGINA NA SOLVE NKO NGA WALAY AI
     }
 
+    // collision magic, will store forever in my heart
     public boolean collision(Components a, Components b) {
         if (a.x + a.width > b.x &&
                 a.x < b.x + b.width &&
