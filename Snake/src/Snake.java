@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -14,7 +13,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         int x, y, velocityX, velocityY, startX, startY, width, height;
         char direction, ogDirection = ' ';
         int prevX, prevY;
-        static int[] snakePosition = new int[4];
 
         // initialization, pede rani e separate ug class
         Components(int x, int y, int width, int height) {
@@ -64,10 +62,12 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     LinkedList<Components> bodies;
     Components head;
     Components food;
+    Components bodyEaten;
     int foodWidthHeight = 10;
     int bodyWidthHeight = 20;
     Random random = new Random();
     Timer gameLoop;
+    int score;
 
     // initialization
     Snake() {
@@ -112,8 +112,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         head.y += head.velocityY;
 
         if (collision(head, food)) {
-            gameLoop.stop();
-            System.out.println("NAABOT DIRI");
+            food.x = random.nextInt(569);
+            food.y = random.nextInt(839);
+            System.out.println(bodyEaten);
+            System.out.println(score);
+            bodyEaten = new Components(head.x, head.y, bodyWidthHeight, bodyWidthHeight);
+            score += 10;
+            bodies.add(bodyEaten);
         }
 
         if (head.x < 0 || head.x > 570 || head.y < 0 || head.y > 840) {
