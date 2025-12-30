@@ -62,8 +62,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     // declaration
     LinkedList<Components> bodies;
-    HashSet<Components> foods;
     Components head;
+    Components food;
     int foodWidthHeight = 10;
     int bodyWidthHeight = 20;
     Random random = new Random();
@@ -89,6 +89,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void loadBody() {
         bodies = new LinkedList<Components>();
         head = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
+        food = new Components(random.nextInt(569), random.nextInt(839), 10, 10);
 
         Components firstBody = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
@@ -109,6 +110,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
         head.x += head.velocityX;
         head.y += head.velocityY;
+
+        if (collision(head, food)) {
+            gameLoop.stop();
+            System.out.println("NAABOT DIRI");
+        }
 
         if (head.x < 0 || head.x > 570 || head.y < 0 || head.y > 840) {
             gameLoop.stop();
@@ -134,6 +140,15 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // TANGINA NA SOLVE NKO NGA WALAY AI
     }
 
+    public boolean collision(Components a, Components b) {
+        if (a.x + a.width > b.x &&
+                a.x < b.x + b.width &&
+                a.y + a.height > b.y &&
+                a.y < b.y + b.height)
+            return true;
+        return false;
+    }
+
     // needed mani, especially ang super.paint
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -143,9 +158,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // painting the shi
     public void draw(Graphics g) {
 
+        g.setColor(Color.YELLOW);
+        g.fillOval(food.x, food.y, food.width, food.height);
+
         for (Components body : bodies) {
             g.setColor(Color.WHITE);
             g.fillRect(body.x, body.y, body.width, body.height);
+            g.setColor(Color.RED);
+            g.drawRect(body.x, body.y, body.width, body.height);
         }
 
         g.setColor(Color.RED);
