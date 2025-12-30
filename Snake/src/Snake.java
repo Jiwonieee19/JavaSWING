@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -61,6 +62,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     // declaration
     LinkedList<Components> bodies;
+    HashSet<Components> foods;
     Components head;
     int foodWidthHeight = 10;
     int bodyWidthHeight = 20;
@@ -86,11 +88,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // not)
     public void loadBody() {
         bodies = new LinkedList<Components>();
-        head = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
+        head = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
 
-        Components firstBody = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
-        Components secondBody = new Components(80, 10, bodyWidthHeight, bodyWidthHeight);
+        Components secondBody = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
         bodies.add(secondBody);
         // Components thirdBody = new Components(80, 10, bodyWidthHeight,
         // bodyWidthHeight);
@@ -104,8 +106,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // e call sa actionlistener pra ma update ang head, but need pa e update ang
     // bodys ha
     public void move() {
+
         head.x += head.velocityX;
         head.y += head.velocityY;
+
+        if (head.x < 0 || head.x > 570 || head.y < 0 || head.y > 840) {
+            gameLoop.stop();
+        }
 
         // body
         if (head.velocityX == 0 && head.velocityY == 0) {
