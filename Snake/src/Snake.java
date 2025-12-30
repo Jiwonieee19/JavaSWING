@@ -68,6 +68,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     Random random = new Random();
     Timer gameLoop;
     int score;
+    long lastPressedTime;
+    final long threshold = 200;
 
     // initialization
     Snake() {
@@ -91,9 +93,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         head = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
         food = new Components(random.nextInt(569), random.nextInt(839), 10, 10);
 
-        Components firstBody = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
+        Components firstBody = new Components(head.prevX, head.prevY, bodyWidthHeight, bodyWidthHeight);
         bodies.add(firstBody);
-        Components secondBody = new Components(0, 0, bodyWidthHeight, bodyWidthHeight);
+        Components secondBody = new Components(head.prevX, head.prevY, bodyWidthHeight, bodyWidthHeight);
         bodies.add(secondBody);
         // Components thirdBody = new Components(80, 10, bodyWidthHeight,
         // bodyWidthHeight);
@@ -116,7 +118,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             food.y = random.nextInt(839);
             System.out.println(bodyEaten);
             System.out.println(score);
-            bodyEaten = new Components(head.x, head.y, bodyWidthHeight, bodyWidthHeight);
+            bodyEaten = new Components(head.prevX, head.prevY, bodyWidthHeight, bodyWidthHeight);
             score += 10;
             bodies.add(bodyEaten);
         }
@@ -134,6 +136,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 head.prevY = head.y;
                 if (i == 1) {
                     for (int j = 1; j < bodies.size(); j++) {
+                        if (collision(head, bodies.get(j)) && j > 1) {
+                            gameLoop.stop();
+                        }
                         bodies.get(j).bodyDirection(bodies.get(j - 1).prevX, bodies.get(j - 1).prevY);
                         bodies.get(j - 1).prevX = bodies.get(j - 1).x;
                         bodies.get(j - 1).prevY = bodies.get(j - 1).y;
@@ -195,21 +200,40 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     // ACTIONS
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            head.updateDirection('R');
-            System.out.println("RAYT");
+        long now = System.currentTimeMillis();
+
+        if (now - lastPressedTime > threshold) {
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                if (head.direction != 'L') {
+                    head.updateDirection('R');
+                }
+                System.out.println("RAYT");
+                lastPressedTime = now;
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                if (head.direction != 'R') {
+                    head.updateDirection('L');
+                }
+                System.out.println("LIP");
+                lastPressedTime = now;
+            } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                if (head.direction != 'D') {
+                    head.updateDirection('U');
+                }
+                System.out.println("AP");
+                lastPressedTime = now;
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                if (head.direction != 'U') {
+                    head.updateDirection('D');
+                }
+                System.out.println("DAWN");
+                lastPressedTime = now;
+            }
         }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            head.updateDirection('L');
-            System.out.println("LIP");
-        }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            head.updateDirection('U');
-            System.out.println("AP");
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            head.updateDirection('D');
-            System.out.println("DAWN");
-        }
+
+        // making this into else if instead of indiv if does not fix the problem nga mo
+        // read siyag duha ka input, if up and right e click ma bypass niya iyang body
+        // just like how it works tong wala pay if (head.direction !=)
+
+        // HOLDING THE TIMEFRAME MAKE THIS WORK, FROM OVERFLOW BTW
     }
 }
