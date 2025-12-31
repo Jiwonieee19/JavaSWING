@@ -4,15 +4,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class TicTacToe extends JPanel implements ActionListener, MouseListener {
+
+    class Components {
+        int x, y;
+        Image image;
+        int width = 180, height = 180;
+
+        Components(Image image, int x, int y) {
+            this.image = image;
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     private String[] template = { "XXX", "XXX", "XXX" };
     Image X;
     Image O;
     Point coordinates;
     LinkedList<String> remaining;
+    HashSet<Components> xplays;
+    HashSet<Components> oplays;
 
     TicTacToe() {
         setSize(600, 600);
@@ -33,6 +48,8 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
         remaining.add("3rd1st");
         remaining.add("3rd2nd");
         remaining.add("3rd3rd");
+        xplays = new HashSet<Components>();
+        oplays = new HashSet<Components>();
         // loadTemplate();
     }
 
@@ -42,6 +59,16 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
 
             }
         }
+    }
+
+    public boolean exist(String remains) {
+        for (int i = 0; i < remaining.size(); i++) {
+            if (remains.equals(remaining.get(i))) {
+                remaining.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void paintComponent(Graphics g) {
@@ -56,6 +83,11 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
                 g.drawRect((j * 200) + 50, (i * 200) + 40, 180, 180);
             }
         }
+
+        for (Components xo : xplays) {
+            g.drawImage(X, xo.x, xo.y, xo.width, xo.height, null);
+        }
+
     }
 
     @Override
@@ -65,6 +97,12 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
         // 1ST ROW
         if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 1st Column");
+            if (exist("1st1st")) {
+                Components xplay = new Components(X, coordinates.x, coordinates.y);
+                xplays.add(xplay);
+                System.out.println("exist try");
+                repaint();
+            }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 2nd Column");
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 40 && coordinates.y < 220) {
