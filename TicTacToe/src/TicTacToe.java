@@ -1,13 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class TicTacToe extends JPanel implements ActionListener, MouseListener {
+public class TicTacToe extends JPanel implements MouseListener {
 
     class Components {
         int x, y;
@@ -36,7 +34,7 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
         addMouseListener(this);
 
         X = new ImageIcon(getClass().getResource("./X.png")).getImage();
-        O = new ImageIcon(getClass().getResource("O.png")).getImage();
+        O = new ImageIcon(getClass().getResource("./O.png")).getImage();
         coordinates = new Point();
         remaining = new LinkedList<String>();
         remaining.add("1st1st");
@@ -50,15 +48,13 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
         remaining.add("3rd3rd");
         xplays = new HashSet<Components>();
         oplays = new HashSet<Components>();
-        // loadTemplate();
     }
 
-    public void loadTemplate() {
-        for (int i = 0; i < template.length; i++) {
-            for (int j = 0; j < template[i].length(); j++) {
-
-            }
-        }
+    public void paintChoice() {
+        Components xplay = new Components(X, coordinates.x, coordinates.y);
+        xplays.add(xplay);
+        System.out.println("exist try");
+        repaint();
     }
 
     public boolean exist(String remains) {
@@ -98,29 +94,68 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
         if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 1st Column");
             if (exist("1st1st")) {
-                Components xplay = new Components(X, coordinates.x, coordinates.y);
-                xplays.add(xplay);
-                System.out.println("exist try");
-                repaint();
+                coordinates.x = 50;
+                coordinates.y = 40;
+                paintChoice();
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 2nd Column");
+            if (exist("1st2nd")) {
+                coordinates.x = 250;
+                coordinates.y = 40;
+                paintChoice();
+            }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 3rd Column");
+            if (exist("1st3rd")) {
+                coordinates.x = 450;
+                coordinates.y = 40;
+                paintChoice();
+            }
             // 2ND ROW
         } else if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 240 && coordinates.y < 420) {
             System.out.println("2nd Row, 1st Column");
+            if (exist("2nd1st")) {
+                coordinates.x = 50;
+                coordinates.y = 240;
+                paintChoice();
+            }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 240 && coordinates.y < 420) {
             System.out.println("2nd Row, 2nd Column");
+            if (exist("2nd2nd")) {
+                coordinates.x = 250;
+                coordinates.y = 240;
+                paintChoice();
+            }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 240 && coordinates.y < 420) {
             System.out.println("2nd Row, 3rd Column");
+            if (exist("2nd3rd")) {
+                coordinates.x = 450;
+                coordinates.y = 240;
+                paintChoice();
+            }
             // 3RD ROW
         } else if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 440 && coordinates.y < 620) {
             System.out.println("3rd Row, 1st Column");
+            if (exist("3rd1st")) {
+                coordinates.x = 50;
+                coordinates.y = 440;
+                paintChoice();
+            }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 440 && coordinates.y < 620) {
             System.out.println("3rd Row, 2nd Column");
+            if (exist("3rd2nd")) {
+                coordinates.x = 250;
+                coordinates.y = 440;
+                paintChoice();
+            }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 440 && coordinates.y < 620) {
             System.out.println("3rd Row, 3rd Column");
+            if (exist("3rd3rd")) {
+                coordinates.x = 450;
+                coordinates.y = 440;
+                paintChoice();
+            }
         }
     }
 
@@ -138,11 +173,5 @@ public class TicTacToe extends JPanel implements ActionListener, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
 }
