@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class TicTacToe extends JPanel implements MouseListener {
 
@@ -26,6 +27,9 @@ public class TicTacToe extends JPanel implements MouseListener {
     LinkedList<String> remaining;
     HashSet<Components> xplays;
     HashSet<Components> oplays;
+    int[] xarray;
+    int[] yarray;
+    Random random;
 
     TicTacToe() {
         setSize(600, 600);
@@ -48,13 +52,16 @@ public class TicTacToe extends JPanel implements MouseListener {
         remaining.add("3rd3rd");
         xplays = new HashSet<Components>();
         oplays = new HashSet<Components>();
+        xarray = new int[] { 50, 250, 450 };
+        yarray = new int[] { 40, 240, 440 };
+        random = new Random();
+
     }
 
     public void paintChoice() {
         Components xplay = new Components(X, coordinates.x, coordinates.y);
         xplays.add(xplay);
         System.out.println("exist try");
-        repaint();
     }
 
     public boolean exist(String remains) {
@@ -65,6 +72,23 @@ public class TicTacToe extends JPanel implements MouseListener {
             }
         }
         return false;
+    }
+
+    public void paintAIChoice(int comparex, int comparey) {
+        int x = xarray[random.nextInt(3)];
+        int y = yarray[random.nextInt(3)];
+
+        if (x == comparex && y == comparey) {
+            if (x == 50)
+                x = 250;
+            if (x == 250)
+                x = 450;
+            if (x == 450)
+                x = 50;
+        }
+
+        Components oplay = new Components(O, x, y);
+        oplays.add(oplay);
     }
 
     public void paintComponent(Graphics g) {
@@ -84,6 +108,10 @@ public class TicTacToe extends JPanel implements MouseListener {
             g.drawImage(X, xo.x, xo.y, xo.width, xo.height, null);
         }
 
+        for (Components xo : oplays) {
+            g.drawImage(O, xo.x, xo.y, xo.width, xo.height, null);
+        }
+
     }
 
     @Override
@@ -97,6 +125,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 40;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 2nd Column");
@@ -104,6 +133,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 40;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 40 && coordinates.y < 220) {
             System.out.println("1st Row, 3rd Column");
@@ -111,6 +141,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 40;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
             // 2ND ROW
         } else if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 240 && coordinates.y < 420) {
@@ -119,6 +150,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 240;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 240 && coordinates.y < 420) {
             System.out.println("2nd Row, 2nd Column");
@@ -126,6 +158,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 240;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 240 && coordinates.y < 420) {
             System.out.println("2nd Row, 3rd Column");
@@ -133,6 +166,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 240;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
             // 3RD ROW
         } else if (coordinates.x > 50 && coordinates.x < 230 && coordinates.y > 440 && coordinates.y < 620) {
@@ -141,6 +175,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 440;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 440 && coordinates.y < 620) {
             System.out.println("3rd Row, 2nd Column");
@@ -148,6 +183,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 440;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 440 && coordinates.y < 620) {
             System.out.println("3rd Row, 3rd Column");
@@ -155,8 +191,11 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 440;
                 paintChoice();
+                paintAIChoice(coordinates.x, coordinates.y);
             }
         }
+
+        repaint();
     }
 
     @Override
