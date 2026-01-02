@@ -1,18 +1,6 @@
-## Getting Started
+TICTACTOE GAME (LOTS OF IF-ELSE BUT ILL TRY TO LESSEN THEM NEXT GAME)
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+THERE'S A LOT OF ROOM FOR IMPROVEMENTS LIKE HAVING AN ANIMATION USING GIF, AND CLEANING THE CODES
+BUT I DID JUST CREATE THIS TO PRACTICE, SO ILL MOVE ON TO OTHER GAME CONCEPT
 
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+ILL TRY TO WRITE BETTER THAN THIS ONE NEXT TIME IN TERMS OF BUILDING LOGICS
