@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class TicTacToe extends JPanel implements MouseListener {
 
+    // template class for every move of player/bot and its coordinates
     class Components {
         int x, y;
         Image image;
@@ -20,6 +21,7 @@ public class TicTacToe extends JPanel implements MouseListener {
         }
     }
 
+    // Variable initialization, and declaration for some;
     private String[] template = { "XXX", "XXX", "XXX" };
     Image X;
     Image O;
@@ -33,6 +35,7 @@ public class TicTacToe extends JPanel implements MouseListener {
     boolean gameTie = false;
     char winner;
 
+    // constructor ofc
     TicTacToe() {
         setSize(600, 600);
         // setPreferredSize(new Dimension(600, 600));
@@ -57,12 +60,14 @@ public class TicTacToe extends JPanel implements MouseListener {
         random = new Random();
     }
 
+    // actually this just store the choice to a class called components
     public void paintChoice() {
         Components xplay = new Components(X, coordinates.x, coordinates.y);
         xplays.add(xplay);
         System.out.println("exist try");
     }
 
+    // if available, the choice is valid then remove that box from the choices
     public boolean exist(String remains) {
         for (int i = 0; i < remaining.size(); i++) {
             System.out.println(remaining.get(i));
@@ -75,6 +80,7 @@ public class TicTacToe extends JPanel implements MouseListener {
         return false;
     }
 
+    // randomize action from random, chooses from remaining choices
     public void paintAIChoice() {
         int x = 99;
         int y = 99;
@@ -132,6 +138,7 @@ public class TicTacToe extends JPanel implements MouseListener {
         System.out.println(remaining.size());
     }
 
+    // check if naay nadaog or nahumana
     public void gameWinnerChecker() {
         int tie = 0;
         if (gameBoxTracker[0] == gameBoxTracker[1] && gameBoxTracker[1] == gameBoxTracker[2]) {
@@ -182,6 +189,7 @@ public class TicTacToe extends JPanel implements MouseListener {
             gameTie = true;
         }
 
+        // checker if the game sill dont have a winner after consuming 8 boxes
         int availableBox = 0;
         for (int k = 0; k < gameBoxTracker.length; k++) {
             if (gameBoxTracker[k] != 'X' && gameBoxTracker[k] != 'O') {
@@ -196,12 +204,15 @@ public class TicTacToe extends JPanel implements MouseListener {
 
     }
 
+    // paints
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
     }
 
+    // painting the real stuff
     public void draw(Graphics g) {
+        // the white boxes
         for (int i = 0; i < template.length; i++) {
             for (int j = 0; j < template[i].length(); j++) {
                 g.setColor(Color.WHITE);
@@ -227,6 +238,7 @@ public class TicTacToe extends JPanel implements MouseListener {
         }
     }
 
+    // ofc function for the mouse action
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println(e.getPoint());
