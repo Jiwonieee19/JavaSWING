@@ -186,6 +186,10 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.RED);
         g.fillRect(head.x, head.y, head.width, head.height);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 15));
+        g.drawString("SCORE: " + score, 25, 25);
     }
 
     // action listener na ma pop ni timer
