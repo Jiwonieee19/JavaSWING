@@ -52,8 +52,6 @@ public class TicTacToe extends JPanel implements MouseListener {
         remaining.add("3rd3rd");
         xplays = new HashSet<Components>();
         oplays = new HashSet<Components>();
-        xarray = new int[] { 50, 250, 450 };
-        yarray = new int[] { 40, 240, 440 };
         random = new Random();
 
     }
@@ -66,6 +64,7 @@ public class TicTacToe extends JPanel implements MouseListener {
 
     public boolean exist(String remains) {
         for (int i = 0; i < remaining.size(); i++) {
+            System.out.println(remaining.get(i));
             if (remains.equals(remaining.get(i))) {
                 remaining.remove(i);
                 System.out.println("ABOT DIRI");
@@ -80,22 +79,51 @@ public class TicTacToe extends JPanel implements MouseListener {
         int y = 99;
         int dice = random.nextInt(remaining.size());
         String check = remaining.get(dice);
-        if (check.charAt(0) == '1')
-            x = xarray[0];
-        if (check.charAt(0) == '2')
-            x = xarray[1];
-        if (check.charAt(0) == '3')
-            x = xarray[2];
-        if (check.charAt(3) == '1')
-            y = yarray[0];
-        if (check.charAt(3) == '2')
-            y = yarray[1];
-        if (check.charAt(3) == '3')
-            y = yarray[2];
+        if (check.equalsIgnoreCase("1st1st")) {
+            x = 50;
+            y = 40;
+        }
+        if (check.equalsIgnoreCase("1st2nd")) {
+            x = 250;
+            y = 40;
+        }
+        if (check.equalsIgnoreCase("1st3rd")) {
+            x = 450;
+            y = 40;
+        }
+        if (check.equalsIgnoreCase("2nd1st")) {
+            x = 50;
+            y = 240;
+        }
+        if (check.equalsIgnoreCase("2nd2nd")) {
+            x = 250;
+            y = 240;
+        }
+        if (check.equalsIgnoreCase("2nd3rd")) {
+            x = 450;
+            y = 240;
+        }
+        if (check.equalsIgnoreCase("3rd1st")) {
+            x = 50;
+            y = 440;
+        }
+        if (check.equalsIgnoreCase("3rd2nd")) {
+            x = 250;
+            y = 440;
+        }
+        if (check.equalsIgnoreCase("3rd3rd")) {
+            x = 450;
+            y = 440;
+        }
+
         Components oplay = new Components(O, x, y);
         oplays.add(oplay);
         remaining.remove(dice);
         System.out.println(remaining.size());
+    }
+
+    public void gameWinnerChecker() {
+
     }
 
     public void paintComponent(Graphics g) {
@@ -202,6 +230,7 @@ public class TicTacToe extends JPanel implements MouseListener {
             }
         }
 
+        gameWinnerChecker();
         repaint();
     }
 
