@@ -27,9 +27,11 @@ public class TicTacToe extends JPanel implements MouseListener {
     LinkedList<String> remaining;
     HashSet<Components> xplays;
     HashSet<Components> oplays;
-    int[] xarray;
-    int[] yarray;
     Random random;
+    char[] gameBoxTracker = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    boolean gameWinner = false;
+    boolean gameTie = false;
+    char winner;
 
     TicTacToe() {
         setSize(600, 600);
@@ -53,7 +55,6 @@ public class TicTacToe extends JPanel implements MouseListener {
         xplays = new HashSet<Components>();
         oplays = new HashSet<Components>();
         random = new Random();
-
     }
 
     public void paintChoice() {
@@ -82,38 +83,47 @@ public class TicTacToe extends JPanel implements MouseListener {
         if (check.equalsIgnoreCase("1st1st")) {
             x = 50;
             y = 40;
+            gameBoxTracker[0] = 'O';
         }
         if (check.equalsIgnoreCase("1st2nd")) {
             x = 250;
             y = 40;
+            gameBoxTracker[1] = 'O';
         }
         if (check.equalsIgnoreCase("1st3rd")) {
             x = 450;
             y = 40;
+            gameBoxTracker[2] = 'O';
         }
         if (check.equalsIgnoreCase("2nd1st")) {
             x = 50;
             y = 240;
+            gameBoxTracker[3] = 'O';
         }
         if (check.equalsIgnoreCase("2nd2nd")) {
             x = 250;
             y = 240;
+            gameBoxTracker[4] = 'O';
         }
         if (check.equalsIgnoreCase("2nd3rd")) {
             x = 450;
             y = 240;
+            gameBoxTracker[5] = 'O';
         }
         if (check.equalsIgnoreCase("3rd1st")) {
             x = 50;
             y = 440;
+            gameBoxTracker[6] = 'O';
         }
         if (check.equalsIgnoreCase("3rd2nd")) {
             x = 250;
             y = 440;
+            gameBoxTracker[7] = 'O';
         }
         if (check.equalsIgnoreCase("3rd3rd")) {
             x = 450;
             y = 440;
+            gameBoxTracker[8] = 'O';
         }
 
         Components oplay = new Components(O, x, y);
@@ -123,6 +133,66 @@ public class TicTacToe extends JPanel implements MouseListener {
     }
 
     public void gameWinnerChecker() {
+        int tie = 0;
+        if (gameBoxTracker[0] == gameBoxTracker[1] && gameBoxTracker[1] == gameBoxTracker[2]) {
+            gameWinner = true;
+            winner = gameBoxTracker[0];
+            tie++;
+            System.out.println("HELLU, NA CHANGE: " + gameBoxTracker[0]);
+        }
+        if (gameBoxTracker[3] == gameBoxTracker[4] && gameBoxTracker[4] == gameBoxTracker[5]) {
+            gameWinner = true;
+            winner = gameBoxTracker[3];
+            tie++;
+        }
+        if (gameBoxTracker[6] == gameBoxTracker[7] && gameBoxTracker[7] == gameBoxTracker[8]) {
+            gameWinner = true;
+            winner = gameBoxTracker[6];
+            tie++;
+        }
+
+        if (gameBoxTracker[0] == gameBoxTracker[3] && gameBoxTracker[3] == gameBoxTracker[6]) {
+            gameWinner = true;
+            winner = gameBoxTracker[0];
+            tie++;
+        }
+        if (gameBoxTracker[1] == gameBoxTracker[4] && gameBoxTracker[4] == gameBoxTracker[7]) {
+            gameWinner = true;
+            winner = gameBoxTracker[1];
+            tie++;
+        }
+        if (gameBoxTracker[2] == gameBoxTracker[5] && gameBoxTracker[5] == gameBoxTracker[8]) {
+            gameWinner = true;
+            winner = gameBoxTracker[2];
+            tie++;
+        }
+
+        if (gameBoxTracker[0] == gameBoxTracker[4] && gameBoxTracker[4] == gameBoxTracker[8]) {
+            gameWinner = true;
+            winner = gameBoxTracker[0];
+            tie++;
+        }
+        if (gameBoxTracker[2] == gameBoxTracker[4] && gameBoxTracker[4] == gameBoxTracker[6]) {
+            gameWinner = true;
+            winner = gameBoxTracker[2];
+            tie++;
+        }
+
+        if (tie == 2) {
+            gameTie = true;
+        }
+
+        int availableBox = 0;
+        for (int k = 0; k < gameBoxTracker.length; k++) {
+            if (gameBoxTracker[k] != 'X' && gameBoxTracker[k] != 'O') {
+                availableBox++;
+                System.out.println("NAA SULOD SA GAMEBOX NOT EQUAL: " + availableBox);
+            }
+        }
+        if (availableBox == 1) {
+            gameTie = true;
+            System.out.println("NAKASULOD");
+        }
 
     }
 
@@ -147,6 +217,14 @@ public class TicTacToe extends JPanel implements MouseListener {
             g.drawImage(O, xo.x, xo.y, xo.width, xo.height, null);
         }
 
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        if (gameTie && !gameWinner) {
+            g.drawString("GAME OVER: IT'S A TIE", 25, 25);
+        } else if (gameWinner) {
+            String strwinner = "";
+            strwinner = (winner == 'X') ? "PLAYER" : "BOT";
+            g.drawString("GAME OVER, WINNER: " + strwinner, 25, 25);
+        }
     }
 
     @Override
@@ -160,6 +238,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 40;
                 paintChoice();
+                gameBoxTracker[0] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 40 && coordinates.y < 220) {
@@ -168,6 +247,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 40;
                 paintChoice();
+                gameBoxTracker[1] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 40 && coordinates.y < 220) {
@@ -176,6 +256,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 40;
                 paintChoice();
+                gameBoxTracker[2] = 'X';
                 paintAIChoice();
             }
             // 2ND ROW
@@ -185,6 +266,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 240;
                 paintChoice();
+                gameBoxTracker[3] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 240 && coordinates.y < 420) {
@@ -193,6 +275,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 240;
                 paintChoice();
+                gameBoxTracker[4] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 240 && coordinates.y < 420) {
@@ -201,6 +284,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 240;
                 paintChoice();
+                gameBoxTracker[5] = 'X';
                 paintAIChoice();
             }
             // 3RD ROW
@@ -210,6 +294,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 50;
                 coordinates.y = 440;
                 paintChoice();
+                gameBoxTracker[6] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 250 && coordinates.x < 430 && coordinates.y > 440 && coordinates.y < 620) {
@@ -218,6 +303,7 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 250;
                 coordinates.y = 440;
                 paintChoice();
+                gameBoxTracker[7] = 'X';
                 paintAIChoice();
             }
         } else if (coordinates.x > 450 && coordinates.x < 630 && coordinates.y > 440 && coordinates.y < 620) {
@@ -226,11 +312,15 @@ public class TicTacToe extends JPanel implements MouseListener {
                 coordinates.x = 450;
                 coordinates.y = 440;
                 paintChoice();
+                gameBoxTracker[8] = 'X';
                 paintAIChoice();
             }
         }
 
         gameWinnerChecker();
+        if (gameWinner || gameTie) {
+            this.removeMouseListener(this);
+        }
         repaint();
     }
 
