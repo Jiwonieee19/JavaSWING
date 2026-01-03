@@ -1,8 +1,11 @@
 import javax.swing.*;
 
 public class myFrame extends JFrame {
-    int width = 0;
-    int height = 0;
+    int columns = 20;
+    int rows = 16;
+    int pixel = 32;
+    int width = columns * pixel;
+    int height = rows * pixel;
 
     myFrame() {
         this.setTitle("Space Invaders");
@@ -12,5 +15,6 @@ public class myFrame extends JFrame {
         this.setResizable(false);
         SpaceInvaders si = new SpaceInvaders();
         this.add(si);
+        this.pack();
     }
 }
