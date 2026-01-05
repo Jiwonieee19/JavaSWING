@@ -192,7 +192,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
             alienVelocityX = Math.min(alienVelocityX + 3, 13);
             aliensArr.clear();
             bulletsArr.clear();
-            alienVelocityX = 10; // pra kada clear, permi pa right ang first moves
+            alienVelocityX = 2; // pra kada clear, permi pa right ang first moves
             loadAlien();
         }
 
