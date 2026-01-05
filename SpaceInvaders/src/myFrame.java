@@ -14,6 +14,7 @@ public class myFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         SpaceInvaders si = new SpaceInvaders();
+        si.requestFocus();
         this.add(si);
         this.pack();
     }
