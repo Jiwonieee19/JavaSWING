@@ -56,8 +56,8 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
     int alienHeight = pixel;
     int alienX = pixel * 1;
     int alienY = pixel * 1;
-    int alienVelocityX = 10; // naay bug, dli halata if 1 lang iyang movement, so wla nako gi fix pra maak
-                             // proceed sa other game
+    int alienVelocityX = 2; // naay bug, dli halata if 1 lang iyang movement, so wla nako gi fix pra maak
+                            // proceed sa other game
     boolean touchs = false;
 
     int alienRows = 2;
@@ -192,6 +192,7 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
             alienVelocityX = Math.min(alienVelocityX + 3, 13);
             aliensArr.clear();
             bulletsArr.clear();
+            alienVelocityX = 10; // pra kada clear, permi pa right ang first moves
             loadAlien();
         }
 
@@ -252,6 +253,21 @@ public class SpaceInvaders extends JPanel implements ActionListener, KeyListener
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+        if (gameOver) { // if gameover, tas nag press siyag anykeys after nag stop
+            ship.x = shipX;
+            aliensArr.clear();
+            bulletsArr.clear();
+            alienCount = 0;
+            alienVelocityX = 2;
+            alienColumns = 3;
+            alienRows = 2;
+            score = 0;
+            gameOver = false;
+            loadAlien();
+            gameLoop.start();
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             ship.x -= pixel;
             if (ship.x < 0)
