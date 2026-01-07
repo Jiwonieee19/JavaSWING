@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import javax.swing.*;
 
@@ -33,8 +33,13 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     private Image birdImg;
     private boolean gameStart;
     private int fallSpeed;
+    private int obsWidth = pixel + 10;
+    private int obsHeight = pixel * 3;
+    private int obsX = width / 2;
 
+    Random random;
     Blocks bird;
+    LinkedList<Blocks> obstacles;
 
     Timer gameLoop;
 
@@ -47,26 +52,46 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         birdImg = new ImageIcon(getClass().getResource("./resources./bird.png")).getImage();
         bird = new Blocks(birdImg, birdX, birdY, pixel, pixel);
         gameStart = false;
-        // laodMap();
+        loadObstacles();
         gameLoop = new Timer(100, this);
         gameLoop.start();
     }
 
-    public void laodMap() {
+    public void loadObstacles() {
+
+        obstacles = new LinkedList<Blocks>();
+        random = new Random();
+
+        int randomizeY = random.nextInt(height - obsHeight * 2) + obsHeight; // around 64 to height-64 ang bounds
+
+        Blocks First = new Blocks(null, obsX, randomizeY, obsWidth, obsHeight);
+        Blocks Second = new Blocks(null, obsX + (obsWidth * 4), random.nextInt(height - obsHeight * 2) + obsHeight,
+                obsWidth, obsHeight);
+
+        obstacles.add(First);
+        obstacles.add(Second);
     }
 
     public void move() {
 
-        if (fallSpeed > 10) {
-            fallSpeed = 10;
+        if (fallSpeed > 20) {
+            fallSpeed = 20;
         }
 
         if (gameStart) {
             bird.y += fallSpeed;
-            System.out.println(fallSpeed);
+            System.out.println("Free Fall Speed: " + fallSpeed);
+
+            for (int i = 0; i < obstacles.size(); i++) {
+                obstacles.get(i).x -= 6; // modagan tanan obstacle pa left
+            }
         }
 
         fallSpeed++;
+    }
+
+    public void loopObstacle() {
+
     }
 
     public void paintComponent(Graphics g) {
@@ -75,6 +100,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {
+
+        // obstacle
+        for (int i = 0; i < obstacles.size(); i++) {
+            Blocks obs = obstacles.get(i);
+            g.fillRect(obs.x, obs.y, obs.width, obs.height);
+        }
+
+        // bird
         g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
     }
 
@@ -95,9 +128,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            bird.y -= 35;
+            bird.y -= 20;
             fallSpeed = 1;
-            System.out.println("NAABOT DIRI");
+            System.out.println("NI UP");
         }
 
         gameStart = true;
