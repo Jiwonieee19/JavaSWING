@@ -62,10 +62,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
         obstacles = new LinkedList<Blocks>();
         random = new Random();
 
-        int randomizeY = random.nextInt(height - obsHeight * 2) + obsHeight; // around 64 to height-64 ang bounds
+        int randomizeY = random.nextInt(height - (obsHeight * 3)) + obsHeight; // around 96 to height-96 ang bounds
 
         Blocks First = new Blocks(null, obsX, randomizeY, obsWidth, obsHeight);
-        Blocks Second = new Blocks(null, obsX + (obsWidth * 4), random.nextInt(height - obsHeight * 2) + obsHeight,
+        Blocks Second = new Blocks(null, obsX + (obsWidth * 5), random.nextInt(height - (obsHeight * 3)) + obsHeight,
                 obsWidth, obsHeight);
 
         obstacles.add(First);
@@ -74,8 +74,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
     public void move() {
 
-        if (fallSpeed > 20) {
-            fallSpeed = 20;
+        if (fallSpeed > 18) {
+            fallSpeed = 18;
         }
 
         if (gameStart) {
@@ -84,10 +84,16 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
 
             for (int i = 0; i < obstacles.size(); i++) {
                 obstacles.get(i).x -= 6; // modagan tanan obstacle pa left
+
+                if (obstacles.get(i).x < -(obsWidth * 6)) { // rather than < 0, this one hides the stutter/glitch on
+                                                            // becoming the next 0 index of the linkedlist
+                    obstacles.remove(i); // e remove obstacle if nalapas sa left frame
+                }
             }
+            System.out.println("Size ni linekdlist: " + obstacles.size());
         }
 
-        fallSpeed++;
+        fallSpeed += 2;
     }
 
     public void loopObstacle() {
@@ -128,10 +134,18 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            bird.y -= 20;
+            bird.y -= 24;
             fallSpeed = 1;
             System.out.println("NI UP");
         }
+
+        random = new Random();
+        int randomizeY = random.nextInt(height - (obsHeight * 3)) + obsHeight; // around 96 to height-96 ang bounds
+
+        Blocks obsLast = obstacles.getLast();
+
+        Blocks obs = new Blocks(null, obsLast.x + (obsWidth * 5), randomizeY, obsWidth, obsHeight);
+        obstacles.add(obs);
 
         gameStart = true;
     }
